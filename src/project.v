@@ -24,7 +24,8 @@ module tt_um_sercure_boot (
   chip top_chip (
     .clk              (clk),
     .rst_n            (rst_n),
-    .soc_reset_n      (ui_in[0]),
+    .start_boot       (ui_in[0]),
+    .soc_reset_n      (soc_reset_n),
     .boot_active_led  (boot_active_led),
     .boot_done_led    (boot_done_led),
     .boot_fail_led    (boot_fail_led)
