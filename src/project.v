@@ -28,7 +28,7 @@ module tt_um_sercure_boot (
     .boot_active_led  (boot_active_led),
     .boot_done_led    (boot_done_led),
     .boot_fail_led    (boot_fail_led)
-  )
+  );
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uo_out[0]   = soc_reset_n;
