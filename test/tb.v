@@ -28,7 +28,7 @@ module tb ();
 `endif
 
   // Instantiate the Tiny Tapeout user module:
-  tt_um_hieutien_secure_boot user_project (
+  tt_um_secure_boot user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
