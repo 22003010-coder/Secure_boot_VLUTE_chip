@@ -7,14 +7,13 @@ FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
 PROJECT_SOURCES = project.v \
-				  boot_controller.v \
-				  chip.v \
-				  crc_comparator.v \
-				  crc32_engine.v \
-				  firmware_reader.v \
-				  firmware_rom.v \
-				  secure_boot_top.v
-
+                  chip.v \
+                  secure_boot_top.v \
+                  boot_controller.v \
+                  firmware_reader.v \
+                  firmware_rom.v \
+                  crc32_engine.v \
+                  crc_comparator.v
 
 ifneq ($(GATES),yes)
 
