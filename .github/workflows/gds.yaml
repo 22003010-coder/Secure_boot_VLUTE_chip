@@ -35,6 +35,9 @@ jobs:
           submodules: recursive
 
       - name: GL test
+        env:
+          PDK: ihp-sg13g2
+          PDK_ROOT: /home/runner/pdk
         uses: TinyTapeout/tt-gds-action/gl_test@ttihp26b
 
   viewer:
