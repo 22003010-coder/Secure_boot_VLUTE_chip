@@ -26,6 +26,11 @@ module tt_um_secure_boot (
     .clk              (clk),
     .rst_n            (rst_n),
     .start_boot       (ui_in[0]),
+    .sclk             (ui_in[1]),
+    .cs_n             (ui_in[2]),
+    .data_in          (uio_in[3:0]),
+    .data_out         (uio_out[3:0]),
+    .oe               (uio_oe[3:0]),
     .soc_reset_n      (soc_reset_n),
     .boot_active_led  (boot_active_led),
     .boot_done_led    (boot_done_led),
@@ -39,10 +44,10 @@ module tt_um_secure_boot (
   assign uo_out[3]   = boot_fail_led;
   assign uo_out[7:4] = 4'b0000;
 
-  assign uio_out = 8'b00000000;
-  assign uio_oe  = 8'b00000000;
+  assign uio_out[7:4] = 4'b0000;
+  assign uio_oe[7:4]  = 4'b0000;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:1], uio_in, 1'b0};
+  wire _unused = &{ena, ui_in[7:3], uio_in[7:4], 1'b0};
 
 endmodule
