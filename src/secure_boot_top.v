@@ -8,19 +8,31 @@ module secure_boot_top #(
     parameter integer ADDR_WIDTH    = 4,
     parameter [31:0]  EXPECTED_CRC  = 32'hA782E9E1
 )(
-    input  wire clk,
-    input  wire rst_n,
-    input  wire start_boot,
+    input  wire       clk,
+    input  wire       rst_n,
+    input  wire       start_boot,
+    
+    input  wire       sclk,
+    input  wire       cs_n,
+    input  wire [3:0] data_in,
+    output wire [3:0] data_out,
+    output wire [3:0] oe,
 
-    output wire soc_reset_n,
-    output wire boot_active,
-    output wire boot_done,
-    output wire boot_fail
+    output wire       soc_reset_n,
+    output wire       boot_active,
+    output wire       boot_done,
+    output wire       boot_fail
+
 );
 
     wire reader_start;
     wire crc_start;
     wire compare_start;
+
+    wire                  reader_req;
+    wire [ADDR_WIDTH-1:0] reader_addr;
+    wire                  spi_req;
+    wire [ADDR_WIDTH-1:0] spi_addr;
 
     wire                  mem_req;
     wire [ADDR_WIDTH-1:0] mem_addr;
@@ -38,6 +50,9 @@ module secure_boot_top #(
     wire compare_done;
 
     assign boot_fail = boot_done & ~soc_reset_n;
+
+    assign mem_req  = soc_reset_n? spi_req  : reader_req;
+    assign mem_addr = soc_reset_n? spi_addr : reader_addr;
 
     boot_controller u_boot_controller (
         .clk           (clk),
@@ -61,8 +76,8 @@ module secure_boot_top #(
         .clk        (clk),
         .rst_n      (rst_n),
         .start      (reader_start),
-        .mem_req    (mem_req),
-        .mem_addr   (mem_addr),
+        .mem_req    (reader_req),
+        .mem_addr   (reader_addr),
         .mem_rdata  (mem_rdata),
         .mem_rvalid (mem_rvalid),
         .data_out   (firmware_data),
@@ -101,5 +116,19 @@ module secure_boot_top #(
         .crc_match      (crc_match),
         .compare_done   (compare_done)
     );
+
+    quad_spi u_quad_spi(
+        .sclk           (sclk),
+        .cs_n           (cs_n),
+        .data_in        (data_in),
+        .data_out       (data_out),
+        .oe             (oe),
+        .clk            (clk),
+        .soc_reset_n    (soc_reset_n),
+        .mem_req        (spi_req),
+        .mem_addr       (spi_addr),
+        .mem_rdata      (mem_rdata),
+        .mem_rvalid     (mem_rvalid)
+);
 
 endmodule
