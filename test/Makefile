@@ -13,7 +13,8 @@ PROJECT_SOURCES = project.v \
                   firmware_reader.v \
                   firmware_rom.v \
                   crc32_engine.v \
-                  crc_comparator.v
+                  crc_comparator.v \
+                  quad_spi.v
 
 ifneq ($(GATES),yes)
 
