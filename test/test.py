@@ -40,7 +40,7 @@ async def test_project_smoke(dut):
 
     # The bidirectional pins are intentionally unused.
     # project.v permanently drives these outputs to zero.
-    //assert int(dut.uio_out.value) == 0
-    //assert int(dut.uio_oe.value) == 0
+    #assert int(dut.uio_out.value) == 0
+    #assert int(dut.uio_oe.value) == 0
 
     dut._log.info("Secure Boot Tiny Tapeout smoke test passed")
