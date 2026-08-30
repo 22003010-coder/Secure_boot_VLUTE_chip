@@ -51,7 +51,6 @@ module quad_spi #(
             cnt               <= 16'd0;
             cmd               <= 8'b00000000;
             oe                <= 4'b0000;
-            preload_mem       <= 8'b00000000;
             shift_addr        <= 24'd0;
             data_out          <= 4'b0000;
             req_toggle_sclk   <= 1'b0;
@@ -237,6 +236,7 @@ module quad_spi #(
         if (cs_n) begin
             ack_sync_sclk <= 3'b000;
             sclk_mem_buf  <= 8'h00;
+            preload_mem       <= 8'b00000000;
         end else begin
             ack_sync_sclk <= {ack_sync_sclk[1:0], ack_toggle_clk};
             if (ack_sync_sclk[1] ^ ack_sync_sclk[0]) begin
