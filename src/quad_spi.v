@@ -33,12 +33,13 @@ module quad_spi #(
 // =============================================================================
 // FRONTEND: MIEN XUNG SCLK (Reset bat dong bo theo CS_N)
 // =============================================================================
-    reg [16:0]   cnt;
+    reg [16:0]  cnt;
     reg [7:0]   cmd;
     reg [23:0]  shift_addr;
     reg [7:0]   sclk_mem_buf;
     reg [7:0]   preload_mem;
-
+    reg [2:0]   ack_sync_sclk;
+    
     reg                  req_toggle_sclk;
     reg [ADDR_WIDTH-1:0] addr_latched_sclk;
 
@@ -56,7 +57,16 @@ module quad_spi #(
             sclk_mem_buf      <= 8'h00;
             req_toggle_sclk   <= 1'b0;
             addr_latched_sclk <= {ADDR_WIDTH{1'b0}};
+            ack_sync_sclk <= 3'b000;
+            preload_mem   <= 8'h00;
         end else begin
+            // CDC DU LIEU TRA VE: clk -> sclk
+            ack_sync_sclk <= {ack_sync_sclk[1:0], ack_toggle_clk};
+            if (ack_sync_sclk[1] ^ ack_sync_sclk[0]) begin
+                preload_mem <= clk_mem_latched;
+            end
+
+            // Chuc nang chinh doc tin hieu tu MASTER
             cnt <= cnt + 1'b1;
 
             if (cnt < 8) begin
@@ -174,13 +184,32 @@ module quad_spi #(
     localparam IDLE = 1'b0;
     localparam REQ  = 1'b1;
 
+    reg [7:0] clk_mem_latched;
+    reg       ack_toggle_clk;
+    reg       mem_rvalid_d; // Thanh ghi de bat suon len của mem_rvalid
+
+    // Tạo tín hiệu Posedge (chỉ active đúng 1 chu kỳ clk duy nhất)
+    wire mem_rvalid_posedge = mem_rvalid && !mem_rvalid_d;
+
     always @(posedge clk or negedge soc_reset_n) begin
         if (!soc_reset_n) begin
             req_sync_clk <= 3'b000;
             mem_req      <= 1'b0;
             mem_addr     <= {ADDR_WIDTH{1'b0}};
             state        <= IDLE;
+            clk_mem_latched <= 8'h00;
+            ack_toggle_clk  <= 1'b0;
+            mem_rvalid_d    <= 1'b0;
         end else begin
+            // CDC DU LIEU TRA VE: sclk -> clk
+            mem_rvalid_d <= mem_rvalid; // Luu lai gia tri chu ky truoc
+            // Chi dao trang thai ack DUNG 1 LAN khi mem_rvalid vua bat len 1
+            if (mem_rvalid_posedge) begin
+                clk_mem_latched <= mem_rdata;
+                ack_toggle_clk  <= ~ack_toggle_clk; 
+            end
+
+            // Chuc nang chinh doc ROM
             req_sync_clk <= {req_sync_clk[0], req_toggle_sclk};
 
             case (state)
@@ -202,46 +231,6 @@ module quad_spi #(
                     end
                 end
             endcase
-        end
-    end
-
-// =============================================================================
-// CDC DU LIEU TRA VE: Tu CLK -> SCLK (Reset bang soc_reset_n va cs_n)
-// =============================================================================
-    reg [7:0] clk_mem_latched;
-    reg       ack_toggle_clk;
-    reg       mem_rvalid_d; // Thanh ghi de bat suon len của mem_rvalid
-
-    // Tạo tín hiệu Posedge (chỉ active đúng 1 chu kỳ clk duy nhất)
-    wire mem_rvalid_posedge = mem_rvalid && !mem_rvalid_d;
-
-    always @(posedge clk or negedge soc_reset_n) begin
-        if (!soc_reset_n) begin
-            clk_mem_latched <= 8'h00;
-            ack_toggle_clk  <= 1'b0;
-            mem_rvalid_d    <= 1'b0;
-        end else begin
-            mem_rvalid_d <= mem_rvalid; // Luu lai gia tri chu ky truoc
-
-            // Chi dao trang thai ack DUNG 1 LAN khi mem_rvalid vua bat len 1
-            if (mem_rvalid_posedge) begin
-                clk_mem_latched <= mem_rdata;
-                ack_toggle_clk  <= ~ack_toggle_clk; 
-            end
-        end
-    end
-
-    reg [2:0] ack_sync_sclk;
-
-    always @(posedge sclk or posedge cs_n) begin
-        if (cs_n) begin
-            ack_sync_sclk <= 3'b000;
-            preload_mem   <= 8'h00;
-        end else begin
-            ack_sync_sclk <= {ack_sync_sclk[1:0], ack_toggle_clk};
-            if (ack_sync_sclk[1] ^ ack_sync_sclk[0]) begin
-                preload_mem <= clk_mem_latched;
-            end
         end
     end
 
