@@ -33,6 +33,8 @@
   "//": "If you need a custom clock configuration, read the following documentation first:",
   "//": "https://tinytapeout.com/faq/#how-can-i-map-an-additional-external-clock-to-one-of-the-gpios",
   "CLOCK_PORT": "clk",
+  "PNR_SDC_FILE": "dir::src/project.sdc",
+  "SIGNOFF_SDC_FILE": "dir::src/project.sdc",
 
   "//": "Configuration docs: https://librelane.readthedocs.io/en/latest/reference/configuration.html",
 
