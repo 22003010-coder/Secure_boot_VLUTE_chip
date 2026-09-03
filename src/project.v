@@ -42,12 +42,8 @@ module tt_um_secure_boot (
   assign uo_out[1]   = boot_active_led;
   assign uo_out[2]   = boot_done_led;
   assign uo_out[3]   = boot_fail_led;
-  assign uo_out[7:4] = 4'b0000;
-
-  assign uio_out[7:4] = 4'b0000;
-  assign uio_oe[7:4]  = 4'b0000;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:3], uio_in[7:4], 1'b0};
+    wire _unused = &{ena, ui_in[7:3], uo_out[7:4], uio_in[7:4], uio_out[7:4], uio_oe[7:4], 1'b0};
 
 endmodule
