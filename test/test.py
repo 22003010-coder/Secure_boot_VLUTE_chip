@@ -59,8 +59,8 @@ async def test_project_smoke(dut):
     dut.ui_in.value = set_bit(int(dut.ui_in.value), 2, 1)
     await ClockCycles(dut.clk, 5)
 
-    # Prepare for transmit data: ui_in[2] = 0, ui_in[1] = 1
-    dut.ui_in.value = set_bit(int(dut.ui_in.value), 2, 0)
+    # Prepare for transmit data: ui_in[2] = 0
+    dut.ui_in.value = 0
 
     # Waiting for command (8 bits MSB first)
     dut._log.info("Waiting for command...")
