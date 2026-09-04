@@ -61,7 +61,6 @@ async def test_project_smoke(dut):
 
     # Prepare for transmit data: ui_in[2] = 0, ui_in[1] = 1
     dut.ui_in.value = set_bit(int(dut.ui_in.value), 2, 0)
-    dut.ui_in.value = set_bit(int(dut.ui_in.value), 1, 1)
 
     # Waiting for command (8 bits MSB first)
     dut._log.info("Waiting for command...")
