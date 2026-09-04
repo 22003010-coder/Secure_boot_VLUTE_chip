@@ -61,7 +61,8 @@ async def test_project_smoke(dut):
 
     # Prepare for transmit data: ui_in[2] = 0
     dut.ui_in.value = 0
-
+    await ClockCycles(dut.clk, 5)
+    
     # Waiting for command (8 bits MSB first)
     dut._log.info("Waiting for command...")
     for i in range(8):
@@ -85,7 +86,7 @@ async def test_project_smoke(dut):
 
     # Send data out (20 cycles)
     dut._log.info("Sending data...")
-    for i in range(20):
+    for i in range(40):
         dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
         await ClockCycles(dut.clk, 5)
 
