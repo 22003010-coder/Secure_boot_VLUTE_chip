@@ -71,7 +71,7 @@ async def test_project_smoke(dut):
 
         # Gan bit uio_in[1] theo cmd
         bit_val = (cmd >> (7 - i)) & 1
-        dut.uio_in.value = set_bit(int(dut.uio_in.value), 1, bit_val)
+        dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, bit_val)
 
         await ClockCycles(dut.clk, 5)
 
