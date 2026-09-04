@@ -67,55 +67,75 @@ async def test_project_smoke(dut):
     dut._log.info("Waiting for command...")
     
     # Receive bit 7 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 1)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
 
     # Receive bit 6 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 1)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
 
     # Receive bit 5 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 1)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
 
     # Receive bit 4 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 0)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
 
     # Receive bit 3 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 1)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
 
     # Receive bit 2 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 0)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
 
     # Receive bit 1 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 1)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
 
     # Receive bit 0 of command
-    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     dut.uio_in.value = set_bit(int(dut.uio_in.value), 0, 1)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+    await ClockCycles(dut.clk, 5)
+    dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
     await ClockCycles(dut.clk, 5)
     
     # Waiting for address (6 bits)
     dut._log.info("Waiting for address...")
     for i in range(6):
-        dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
         dut.uio_in.value = 0
+        dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+        await ClockCycles(dut.clk, 5)
+        dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
         await ClockCycles(dut.clk, 5)
 
     # Send data out (20 cycles)
     dut._log.info("Sending data...")
     for i in range(40):
+        dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
+        await ClockCycles(dut.clk, 5)
         dut.ui_in.value = toggle_bit(int(dut.ui_in.value), 1)
         await ClockCycles(dut.clk, 5)
 
