@@ -56,16 +56,12 @@ async def test_project_smoke(dut):
 
     # Wait for Master to turn on: Bat bit ui_in[2] = 1
     dut._log.info("Boot Done.")
-    ui_val = int(dut.ui_in.value)
-    ui_val = set_bit(ui_val, 2, 1)
-    dut.ui_in.value = ui_val
+    dut.ui_in.value = set_bit(int(dut.ui_in.value), 2, 1)
     await ClockCycles(dut.clk, 5)
 
     # Prepare for transmit data: ui_in[2] = 0, ui_in[1] = 1
-    ui_val = int(dut.ui_in.value)
-    ui_val = set_bit(ui_val, 2, 0)
-    ui_val = set_bit(ui_val, 1, 1)
-    dut.ui_in.value = ui_val
+    dut.ui_in.value = set_bit(int(dut.ui_in.value), 2, 0)
+    dut.ui_in.value = set_bit(int(dut.ui_in.value), 1, 1)
 
     # Waiting for command (8 bits MSB first)
     dut._log.info("Waiting for command...")
