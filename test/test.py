@@ -20,7 +20,7 @@ def toggle_bit(value: int, bit_index: int) -> int:
 
 @cocotb.test()
 async def test_project_smoke(dut):
-    cmd = 0xEB
+    cmd = 235
     addr = 0
 
     """Minimal RTL and gate-level smoke test."""
